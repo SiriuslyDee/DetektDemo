@@ -13,7 +13,6 @@ val Shapes = Shapes(
 private fun testingHelloWorld() {
 }
 
-
 fun publicFuncTest() {
     println("HELLO")
 }

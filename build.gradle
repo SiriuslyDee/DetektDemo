@@ -11,6 +11,7 @@ plugins {
 }
 
 
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 def projectSource = file(projectDir)
 def configFile = files("$rootDir/config/detekt/detekt.yml")
@@ -18,34 +19,44 @@ def baselineFile = file("$rootDir/config/detekt/baseline.xml")
 def kotlinFiles = "**/*.kt"
 def resourceFiles = "**/resources/**"
 def buildFiles = "**/build/**"
-def detektVersion = "1.23.0"
+def buildSrc = "**/buildSrc/**"
+def testFiles = "**/test/**/*.kt"
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
-apply plugin: 'io.gitlab.arturbosch.detekt'
-tasks.register("detektAll", io.gitlab.arturbosch.detekt.Detekt) {
-    description = "Custom DETEKT build for all modules"
+
+detekt {
     parallel = true
     ignoreFailures = false
+    autoCorrect = true
     buildUponDefaultConfig = true
-    setSource(projectSource)
-    baseline.set(baselineFile)
-    config.setFrom(configFile)
-    include(kotlinFiles)
-    exclude(resourceFiles, buildFiles)
     reports {
         html.enabled = true
         xml.enabled = false
         txt.enabled = false
+        sarif.enabled = false
     }
 }
 
-tasks.register("detektGenerateBaseline", io.gitlab.arturbosch.detekt.DetektCreateBaselineTask) {
-    description = "Custom DETEKT build to build baseline for all modules"
-    parallel = true
-    ignoreFailures = false
-    buildUponDefaultConfig = true
+
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.18.1")
+}
+
+tasks.register("detektCheckAll", Detekt) {
+    description = "DETEKT Check for all modules"
     setSource(projectSource)
     baseline.set(baselineFile)
     config.setFrom(configFile)
     include(kotlinFiles)
-    exclude(resourceFiles, buildFiles)
+    exclude(resourceFiles, buildFiles, buildSrc, testFiles)
+}
+
+tasks.register("generateAllBaseline", DetektCreateBaselineTask) {
+    description = "DETEKT generate the baseline file for all modules"
+    setSource(projectSource)
+    baseline.set(baselineFile)
+    config.setFrom(configFile)
+    include(kotlinFiles)
+    exclude(resourceFiles, buildFiles, buildSrc, testFiles)
 }

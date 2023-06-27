@@ -4,7 +4,6 @@ package com.dee.features
  * Created by Hein Htet
  */
 
-
 fun emptyFunc() {}
 @Suppress("EmptyFunctionBlock")
 fun emptyFuncWithSuppress() {}
@@ -22,12 +21,11 @@ fun complexFun(
     println(listOf(params1, params2, params3, params4, params5, params6, params7, params8))
 }
 
-
 fun performanceReport() {
     val numberStart = 1
     val numberEnd = 10999999
-    (numberStart..numberEnd).forEach {
-        println("${it}")
+    (numberStart..numberEnd).forEach { number ->
+        println("$number")
     }
 }
 
