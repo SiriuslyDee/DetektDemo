@@ -9,3 +9,11 @@ val Shapes = Shapes(
     medium = RoundedCornerShape(4.dp),
     large = RoundedCornerShape(0.dp)
 )
+
+private fun testingHelloWorld() {
+}
+
+
+fun publicFuncTest() {
+    println("HELLO")
+}
