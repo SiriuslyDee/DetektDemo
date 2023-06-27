@@ -6,6 +6,8 @@ package com.dee.features
 
 
 fun emptyFunc() {}
+@Suppress("EmptyFunctionBlock")
+fun emptyFuncWithSuppress() {}
 
 fun complexFun(
     params1: String,
@@ -17,5 +19,22 @@ fun complexFun(
     params7: String,
     params8: String,
 ) {
-    println("")
+    println(listOf(params1, params2, params3, params4, params5, params6, params7, params8))
+}
+
+
+fun performanceReport() {
+    val numberStart = 1
+    val numberEnd = 10999999
+    (numberStart..numberEnd).forEach {
+        println("${it}")
+    }
+}
+
+fun exception(e: Exception) {
+    when (e) {
+        is NumberFormatException -> {}
+        is IndexOutOfBoundsException -> {}
+        else -> throw Exception(message = "MESSAGE")
+    }
 }
